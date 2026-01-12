@@ -15,9 +15,9 @@ app.get('/', (req, res) => {
 
 // Get all news with search and category filters
 app.get('/api/news', (req, res) => {
-    const { search, category } = req.query; // Removed 'keywords'
+    const { search, category } = req.query; 
   
-    let filteredNews = data; // Start with all news data
+    let filteredNews = data; 
   
     // Filtering by search term
     if (search) {
