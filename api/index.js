@@ -1,25 +1,23 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5000;
 const cors = require('cors');
 
 // middleware
 app.use(express.json());
 app.use(cors());
 
-const data = require('./data/db.json');
+// সঠিক পাথ: এক ধাপ উপরে গিয়ে data ফোল্ডারে ঢোকা
+const data = require('../data/db.json');
 
 app.get('/', (req, res) => {
-  res.send('Next News API Sever!');
+  res.send('Next News API Server is running!');
 });
 
-// Get all news with search and category filters
+// Get all news
 app.get('/api/news', (req, res) => {
     const { search, category } = req.query; 
-  
     let filteredNews = data; 
   
-    // Filtering by search term
     if (search) {
       const searchText = search.toLowerCase();
       filteredNews = filteredNews.filter((newsItem) => {
@@ -29,7 +27,6 @@ app.get('/api/news', (req, res) => {
       });
     }
   
-    // Filtering by category
     if (category) {
       const categoryText = category.toLowerCase();
       filteredNews = filteredNews.filter((newsItem) => {
@@ -37,26 +34,19 @@ app.get('/api/news', (req, res) => {
       });
     }
   
-    // Respond with the filtered news
-    res.send(filteredNews);
-  });
+    res.json(filteredNews);
+});
 
-// Get a single news item by its ID
+// Get single news
 app.get('/api/news/:id', (req, res) => {
   const { id } = req.params;
-
-  // Find the news item with the matching ID
   const newsItem = data.find((item) => item._id === id);
 
-  // If the news item is not found, send a 404 response
   if (!newsItem) {
     return res.status(404).send({ message: 'News item not found' });
   }
-
-  // Send the found news item
-  res.send(newsItem);
+  res.json(newsItem);
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+// Vercel-এর জন্য এটি আবশ্যিক
+module.exports = app;
