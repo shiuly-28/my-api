@@ -5,7 +5,7 @@ const cors = require('cors');
 
 // middleware
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 const data = require('./data/db.json');
 
